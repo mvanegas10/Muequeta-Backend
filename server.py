@@ -1,22 +1,22 @@
 from flask import Flask, jsonify, abort, make_response, request
-import csv
+
+import psycopg2
+
+conn = psycopg2.connect("dbname=muequeta user=admin")
+
+def disconnectTODB(conn):
+	conn.close()
 
 app = Flask(__name__)
 
-marcas = [
-    {
-        'Id': u'1',
-        'Dato': u'A'
-    },
-    {
-        'Id': u'2',
-        'Dato': u'B'
-    }
-]
-
-@app.route('/api/marcas', methods=['GET'])
+@app.route('/households', methods=['GET'])
 def get_marcas():
-	return jsonify({'marcas': marcas})
+	cur = conn.cursor()
+	cur.execute("SELECT * FROM households LIMIT 5;")
+	data = cur.fetchone()
+	cur.close()
+	print data
+	return jsonify({'households': data})
 
 @app.route('/api/dar_marca', methods=['POST'])
 def dar_marca_post():
