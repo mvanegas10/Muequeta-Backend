@@ -55,7 +55,7 @@ CREATE EXTENSION address_standardizer_data_us;
 -- Enable US Tiger Geocoder
 CREATE EXTENSION postgis_tiger_geocoder;
 ```
-Download data to populate the DB [here](data/muequeta.sql). Then, populate the DB using the following command:
+Download data to populate the DB: [muequeta.sql](data/). Then, populate the DB using the following command:
 ```
 psql -U admin -f muequeta.sql muequeta
 ```
