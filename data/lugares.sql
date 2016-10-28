@@ -1,0 +1,23 @@
+SET CLIENT_ENCODING TO UTF8;
+SET STANDARD_CONFORMING_STRINGS TO ON;
+BEGIN;
+CREATE TABLE "lugares" (gid serial,
+"nombre" varchar(254),
+"latitud" numeric,
+"longitud" numeric,
+"descripcion" varchar(254));
+ALTER TABLE "lugares" ADD PRIMARY KEY (gid);
+SELECT AddGeometryColumn('','lugares','geom','0','POINT',2);
+INSERT INTO "lugares" ("nombre","latitud","longitud","descripcion",geom) VALUES ('Palacio de Justicia','4.598513000000000','-74.075871000000006','El primer palacio fue destruido en "El bogotazo", el 9 de abril de 1948. En 1961 se determina su construcci�_n pero en el costado norte de la Plaza de Bol�_var, antes estaba en la Carrera 6 con Calle 11, sin embargo no fue terminado totalmente. Lamen','0101000000C0ED0912DB8452C063EC8497E0641240');
+INSERT INTO "lugares" ("nombre","latitud","longitud","descripcion",geom) VALUES ('Universidad de los Andes','4.602727000000000','-74.064851000000004','La Universidad de los Andes ocupa el puesto 283 del mundo y es la s��ptima mejor de Am��rica Latina, seg�_n escalaf�_n de QS World University Rankings.','01010000003A07CF84268452C02EAA454431691240');
+INSERT INTO "lugares" ("nombre","latitud","longitud","descripcion",geom) VALUES ('Museo de Botero','4.596617000000000','-74.073266000000004','Una numerosa colecci�_n de obras donadas a Colombia por el artista Fernando Botero con la intenci�_n de difundir las artes y la cultura en su pa�_s natal. De las obras, 87 corresponden a su colecci�_n personal de arte universal y el resto, cerca','0101000000297AE063B08452C056F31C91EF621240');
+INSERT INTO "lugares" ("nombre","latitud","longitud","descripcion",geom) VALUES ('Museo de Oro','4.601548000000000','-74.071856999999994','El Museo del Oro del Banco de la Rep�_blica de Colombia es una instituci�_n abierta al p�_blico cuya finalidad es la adquisici�_n, conservaci�_n y exposici�_n de piezas de orfebrer�_a y alfarer�_a de culturas ind�_genas del periodo prec','0101000000463F1A4E998452C097E5EB32FC671240');
+INSERT INTO "lugares" ("nombre","latitud","longitud","descripcion",geom) VALUES ('Museo Nacional de Colombia','4.615562000000000','-74.068479999999994','El Museo Nacional de Colombia es el museo m��s antiguo de Colombia. Su acervo se divide en cuatro colecciones: arte, historia, arqueolog�_a y etnograf�_a. Su colecci�_n de arte colombiano, latinoamericano y europeo incluye pinturas, dibujos, gr','0101000000861BF0F9618452C033A48AE255761240');
+INSERT INTO "lugares" ("nombre","latitud","longitud","descripcion",geom) VALUES ('Cerro de Monserrate','4.605475000000000','-74.055482999999995','El cerro de Monserrate es el m��s conocido de los cerros Orientales de Bogot��. Junto a Guadalupe es uno de los cerros tutelares de la ciudad. Monserrate tiene una altitud de 3152 msnm y se ubica sobre la cordillera oriental.1 Los cerros de Bogot','0101000000F99E91088D8352C0B22E6EA3016C1240');
+INSERT INTO "lugares" ("nombre","latitud","longitud","descripcion",geom) VALUES ('Torre Colpatria','4.610874000000000','-74.070186000000007','La Torre Colpatria es un rascacielos situado en Bogot��, en el sector de San Diego, tambi��n hace parte del Centro Internacional de Bogot��. Con sus 50 pisos es el edificio m��s alto de Colombia en operaci�_n, el 27 de Am��rica Lati','0101000000C6A86BED7D8452C025E82FF488711240');
+INSERT INTO "lugares" ("nombre","latitud","longitud","descripcion",geom) VALUES ('Casa de Moneda','4.597070000000000','-74.073554999999999','La Casa de Moneda de Colombia fue una ceca fundada por el ingeniero militar espa��ol Alonso Turrillo de Yebra en el siglo XVII. En la actualidad alberga la colecci�_n numism��tica y de arte del Banco de la Rep�_blica. Se encuentra en la calle','010100000044DD0720B58452C0DEB06D5166631240');
+INSERT INTO "lugares" ("nombre","latitud","longitud","descripcion",geom) VALUES ('Plaza de Bol�_var','4.598106000000000','-74.076267000000001','La Plaza de Bol�_var es la plaza principal de la ciudad de Bogot�� y de Colombia. Est�� ubicada en el centro de la ciudad, entre las carreras 7.�� y 8.�� con calles 10.�� y 11.��. A su alrededor se encuentran algunos de los prin','0101000000E6B0FB8EE18452C05E2A36E675641240');
+INSERT INTO "lugares" ("nombre","latitud","longitud","descripcion",geom) VALUES ('Carrera S��ptima','4.604701000000000','-74.071821999999997','La carrera S��ptima (avenida carrera 7), tambi��n llamada Transversal Eduardo Posada Fl�_rez es una de las principales v�_as arterias que recorre la ciudad de Bogot�� de norte a sur en su zona oriental. Es la v�_a m��s importante en','010100000088484DBB988452C01A6F2BBD366B1240');
+SELECT UpdateGeometrySRID('lugares','geom',4326);
+COMMIT;
+ANALYZE "lugares";
