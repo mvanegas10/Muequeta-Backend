@@ -2,39 +2,134 @@ from flask import Flask, jsonify, abort, make_response, request
 
 import psycopg2
 
-conn = psycopg2.connect("dbname=muequeta user=admin")
-
-def disconnectTODB(conn):
-	conn.close()
+conn = psycopg2.connect("dbname=muequeta user=Meili")
 
 app = Flask(__name__)
 
-@app.route('/households', methods=['GET'])
-def get_marcas():
+@app.route('/lugares', methods=['GET'])
+def get_lugares():
 	cur = conn.cursor()
-	cur.execute("SELECT * FROM households LIMIT 5;")
+	sql = "SELECT gid,nombre,descripcion,geom FROM lugares"
+	cur.execute(sql)
+	data = cur.fetchall()
+	cur.close()
+	return jsonify({'lugares': data})
+
+@app.route('/lugaresCerca', methods=['POST'])
+def get_lugares_cerca():
+	if not request.json or not 'latitud' in request.json or not 'longitud' in request.json:
+		abort(400)
+
+	latitud = request.json["latitud"]
+	longitud = request.json["longitud"]
+	cur = conn.cursor()
+	sql = "SELECT l.gid,l.nombre,l.descripcion FROM lugares l JOIN (SELECT ST_Buffer(ST_SetSRID(ST_Point(\'%f\',\'%f\'),4326),0.008) AS geom) b ON ST_INTERSECTS(l.geom,b.geom)" % (longitud, latitud)
+	print sql
+	cur.execute(sql)
+	data = cur.fetchall()
+	cur.close()
+	return jsonify({'lugares': data})	
+
+@app.route('/agregarLugar', methods=['POST'])
+def agregar_lugar():
+	nombre = request.json['nombre']
+	descripcion = request.json['descripcion']
+	latitude = request.json['latitud']
+	longitude = request.json['longitud']
+
+	cur = conn.cursor()
+	sql = "INSERT INTO lugares (nombre,descripcion,latitud,longitud) VALUES (\'%s\', \'%s\',\'%f\', \'%f\')" % (nombre, descripcion, latitude, longitude)
+	print sql
+	cur.execute(sql)
+	cur.close()	
+
+	cur = conn.cursor()
+	sql = "SELECT gid FROM lugares WHERE nombre = \'%s\' AND descripcion = \'%s\'" % (nombre, descripcion)
+	cur.execute(sql)
+	gid = cur.fetchone()
+	cur.close()		
+
+	cur = conn.cursor()
+	sql = "UPDATE lugares SET geom = ST_SetSRID(ST_MakePoint(\'%f\', \'%f\'), 4326) WHERE gid = \'%d\'" % (longitude, latitude, gid[0])
+	print sql
+	cur.execute(sql)
+	cur.close()
+	conn.commit()
+
+	cur = conn.cursor()
+	sql = "SELECT gid,nombre,descripcion,geom FROM lugares WHERE nombre = \'%s\'" % (nombre)
+	print sql
+	cur.execute(sql)
 	data = cur.fetchone()
 	cur.close()
-	print data
-	return jsonify({'households': data})
 
-@app.route('/api/dar_marca', methods=['POST'])
-def dar_marca_post():
-	if not request.json or not 'Id' in request.json:
-		abort(400)
-	marca = {
-	'Id': request.json['Id'],
-	'Dato': request.json.get('Dato', "")
-	}
-	return jsonify({'marca': marca}), 201
+	return jsonify({'lugares': data})
 
-@app.route('/api/dar_marca/<Id>/<Dato>', methods=['GET'])
-def dar_marca_get(Id,Dato):
-	marca = {
-	'Id': Id,
-	'Dato': Dato
-	}
-	return jsonify({'marca': marca}), 201
+@app.route('/lugares/<Id>/agregarImagen', methods=['POST'])
+def agregar_imagen(Id):
+	nombre = request.json['nombre']
+	descripcion = request.json['descripcion']
+
+	cur = conn.cursor()
+	sql = "INSERT INTO imagenes (\"idLugar\", \"nombre\", \"descripcion\") VALUES (\'%s\', \'%s\',\'%s\')" % (Id, nombre, descripcion)
+	print sql
+	cur.execute(sql)
+	cur.close()	
+
+	cur = conn.cursor()
+	sql = "SELECT nombre,descripcion FROM imagenes WHERE \"idLugar\" = \'%s\'" % (Id)
+	print sql
+	cur.execute(sql)
+	data = cur.fetchall()
+	cur.close()
+	conn.commit()
+
+	return jsonify({'imagenes': data})	
+
+@app.route('/lugares/<Id>/imagenes', methods=['GET'])
+def get_imagenes(Id):
+
+	cur = conn.cursor()
+	sql = "SELECT nombre,descripcion FROM imagenes WHERE \"idLugar\" = \'%s\'" % (Id)
+	print sql
+	cur.execute(sql)
+	data = cur.fetchall()
+	cur.close()
+
+	return jsonify({'imagenes': data})	
+
+@app.route('/lugares/<Id>/agregarVideo', methods=['POST'])
+def agregar_video(Id):
+	nombre = request.json['nombre']
+	descripcion = request.json['descripcion']
+
+	cur = conn.cursor()
+	sql = "INSERT INTO videos (\"idLugar\", \"nombre\", \"descripcion\") VALUES (\'%s\', \'%s\',\'%s\')" % (Id, nombre, descripcion)
+	print sql
+	cur.execute(sql)
+	cur.close()	
+
+	cur = conn.cursor()
+	sql = "SELECT nombre,descripcion FROM videos WHERE \"idLugar\" = \'%s\'" % (Id)
+	print sql
+	cur.execute(sql)
+	data = cur.fetchall()
+	cur.close()
+	conn.commit()
+
+	return jsonify({'videos': data})	
+
+@app.route('/lugares/<Id>/videos', methods=['GET'])
+def get_videos(Id):
+
+	cur = conn.cursor()
+	sql = "SELECT nombre,descripcion FROM videos WHERE \"idLugar\" = \'%s\'" % (Id)
+	print sql
+	cur.execute(sql)
+	data = cur.fetchall()
+	cur.close()
+
+	return jsonify({'videos': data})		
 
 @app.errorhandler(404)
 def not_found(error):
