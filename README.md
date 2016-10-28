@@ -69,7 +69,7 @@ And run:
 ```
 flask run
 ```
-## Author
+## Authors
 <!-- Contributors table START -->
 | [![Jairo Bernal](https://avatars.githubusercontent.com/jibernal27?s=10000000)<br /><sub>Jairo Bernal</sub>](https://github.com/jibernal27)<br /> | [![Meili Vanegas](https://avatars.githubusercontent.com/mvanegas10?s=5)<br /><sub>Meili Vanegas</sub>](https://github.com/mvanegas10)<br /> |
 | :---: | :---: |
