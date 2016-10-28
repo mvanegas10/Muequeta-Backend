@@ -18,14 +18,14 @@ Some prerequisites are:
 Create a new *role* in postgres:
 
 ```
-CREATE ROLE admin;
+CREATE ROLE Meili;
 ```
 Create the database:
 
 ```
 CREATE DATABASE muequeta
     WITH 
-    OWNER = 'admin'
+    OWNER = 'Meili'
     ENCODING = 'UTF8'
     LC_COLLATE = 'C'
     LC_CTYPE = 'UTF-8'
@@ -55,9 +55,9 @@ CREATE EXTENSION address_standardizer_data_us;
 -- Enable US Tiger Geocoder
 CREATE EXTENSION postgis_tiger_geocoder;
 ```
-Download data to populate the DB: [muequeta.sql](data/). Then, populate the DB using the following command:
+Download [data](data/) to populate the DB. Then, populate the DB using the following command:
 ```
-psql -U admin -f muequeta.sql muequeta
+psql -U admin -f data.sql muequeta
 ```
 
 ## Deployment
@@ -71,8 +71,8 @@ flask run
 ```
 ## Author
 <!-- Contributors table START -->
-| [![Meili Vanegas](https://avatars.githubusercontent.com/mvanegas10?s=100)<br /><sub>Meili Vanegas</sub>](https://github.com/mvanegas10)<br /> |
-| :---: |
+| [![Jairo Bernal](https://avatars.githubusercontent.com/jibernal27?s=10000000)<br /><sub>Jairo Bernal</sub>](https://github.com/jibernal27)<br /> | [![Meili Vanegas](https://avatars.githubusercontent.com/mvanegas10?s=5)<br /><sub>Meili Vanegas</sub>](https://github.com/mvanegas10)<br /> |
+| :---: | :---: |
 
 <!-- Contributors table END -->
 
