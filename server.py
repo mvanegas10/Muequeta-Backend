@@ -9,7 +9,7 @@ app = Flask(__name__)
 @app.route('/lugares', methods=['GET'])
 def get_lugares():
 	cur = conn.cursor()
-	sql = "SELECT gid,nombre,descripcion,geom FROM lugares"
+	sql = "SELECT gid,nombre,descripcion,geom,latitud,longitud FROM lugares"
 	cur.execute(sql)
 	data = cur.fetchall()
 	cur.close()
@@ -28,7 +28,7 @@ def get_lugares_cerca():
 	cur.execute(sql)
 	data = cur.fetchall()
 	cur.close()
-	return jsonify({'lugares': data})	
+	return jsonify({'lugares': data})		
 
 @app.route('/agregarLugar', methods=['POST'])
 def agregar_lugar():
